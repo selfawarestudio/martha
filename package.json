@@ -1,6 +1,6 @@
 {
   "name": "@selfaware/martha",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "🥪 A tiny (~600b gzipped) collection of convenient JavaScript utilities.",
   "source": "src/index.js",
   "main": "dist/martha.js",
@@ -10,7 +10,17 @@
     "build": "microbundle --external none -f modern,cjs,umd",
     "dev": "microbundle watch --external none -f modern,cjs,umd"
   },
-  "keywords": [],
+  "repository": "selfawarestudio/martha",
+  "keywords": [
+    "util",
+    "utils",
+    "utilities",
+    "dom",
+    "math",
+    "events",
+    "lerp"
+  ],
+  "homepage": "https://github.com/selfawarestudio/martha",
   "author": "Mike Wagz <mike@selfaware.studio> (http://selfaware.studio)",
   "license": "MIT",
   "devDependencies": {
