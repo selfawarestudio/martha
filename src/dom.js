@@ -36,7 +36,7 @@ function classes(action) {
 }
 
 /**
- * Add an event listener to one elements or an array of elements.
+ * Add an event listener to one element or an array of elements.
  * Conveniently returns unsubscribe function.
  *
  * @param  {*}           x an element or an array of elements
@@ -74,7 +74,7 @@ export function add(x, cn) {
 }
 
 /**
- * classList shorthand for removing classes to elements
+ * classList shorthand for removing classes from elements
  *
  * @param  {string}     x an element or an array of elements
  * @param  {string}     cn classname
@@ -85,7 +85,7 @@ export function remove(x, cn) {
 }
 
 /**
- * classList shorthand for adding classes to elements
+ * classList shorthand for toggling classes on elements
  *
  * @param  {string}     x an element or an array of elements
  * @param  {string}     cn classname
