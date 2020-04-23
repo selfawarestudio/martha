@@ -128,3 +128,13 @@ export function size() {
 export function index(el) {
   return Array.from(el.parentNode.children).indexOf(el)
 }
+
+/**
+ * Get the index of the provided element amongst it's siblings
+ *
+ * @param {HTMLElement}
+ * @return {DOMRect}
+ */
+export function rect(el) {
+  return el.getBoundingClientRect()
+}
