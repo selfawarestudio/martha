@@ -69,8 +69,8 @@ export function once(x, e, fn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function add(x, cn) {
-  classes('add')(x, cn)
+export function add(x, ...cn) {
+  classes('add')(x, ...cn)
 }
 
 /**
@@ -80,8 +80,8 @@ export function add(x, cn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function remove(x, cn) {
-  classes('remove')(x, cn)
+export function remove(x, ...cn) {
+  classes('remove')(x, ...cn)
 }
 
 /**
