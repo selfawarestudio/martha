@@ -91,8 +91,8 @@ export function remove(x, ...cn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function toggle(x, cn) {
-  classes('toggle')(x, cn)
+export function toggle(x, ...cn) {
+  classes('toggle')(x, ...cn)
 }
 
 /**
