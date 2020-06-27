@@ -138,3 +138,25 @@ export function index(el) {
 export function rect(el) {
   return el.getBoundingClientRect()
 }
+
+/**
+ * Alias for querySelector
+ *
+ * @param {string}         selector
+ * @param {HTMLElement}    container
+ * @return {HTMLElement}
+ */
+export function qs(selector, container = document) {
+  return container.querySelector(selector)
+}
+
+/**
+ * Array-returning alias for querySelectorAll
+ *
+ * @param {string}         selector
+ * @param {HTMLElement}    container
+ * @return {array}
+ */
+export function qsa(selector, container = document) {
+  return [].slice.call(container.querySelectorAll(selector))
+}
