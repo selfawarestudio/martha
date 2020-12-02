@@ -11,7 +11,7 @@
 ## Install
 
 ```sh
-npm i @selfaware/martha
+npm i martha
 ```
 
 #### TODO
