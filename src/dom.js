@@ -136,7 +136,7 @@ export function index(el) {
  * @return {DOMRect}
  */
 export function rect(el) {
-  return el.getBoundingClientRect()
+  return el?.getBoundingClientRect?.()
 }
 
 /**
