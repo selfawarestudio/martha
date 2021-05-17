@@ -1,6 +1,6 @@
 # martha
 
-🥪 A tiny collection of convenient JavaScript utilities.
+🍑 A tiny collection of convenient JavaScript utilities.
 
 ## Features
 
