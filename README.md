@@ -19,20 +19,20 @@ npm i martha
 ```js
 import { qs, on } from 'martha'
 
-let offClick
+let off
 
 function mount() {
   let button = qs('button')
 
   // add click handler on button
-  offClick = on(button, 'click', () => {
+  off = on(button, 'click', () => {
     console.log('click!')
   })
 }
 
 function unmount() {
   // remove click handler from button
-  offClick()
+  off()
 }
 ```
 
