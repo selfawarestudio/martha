@@ -33,7 +33,7 @@ export let distance = (x1, y1, x2, y2) => diagonal(x1 - x2, y1 - y2)
  * Linear interpolation (lerp)
  *
  * @param  {number} v0 current value
- * @param  {number} y1 target value
+ * @param  {number} v1 target value
  * @param  {number} t  progress
  * @return {number}    Interpolated value
  */
