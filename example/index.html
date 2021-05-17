@@ -42,8 +42,8 @@
       on(addButton, 'click', () => {
         if (off) return
 
-        off = on(buttons, 'click', (ev) => {
-          console.log(ev.currentTarget.textContent)
+        off = on(buttons, 'click', (ev, i) => {
+          console.log(ev.currentTarget.textContent, 'index is', i)
           add(ev.currentTarget, 'bg-black c-white')
         })
       })

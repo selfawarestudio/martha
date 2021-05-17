@@ -38,11 +38,11 @@ function unmount() {
 
 ## Functions
 
-### `off = on(el|els, event, fn)`
+### `off = on(el|els, event, callback)`
 
-Add event listener(s) to element or an array of elements. Returns a function to remove the listener(s)
+Add event listener(s) to element or an array of elements. The callback receives the event object as its first parameter and the element index as its second parameter. Returns a function to remove the listener(s)
 
-### `once(el|els, event, fn)`
+### `once(el|els, event, callback)`
 
 Add event listener(s) to element or array of elements and fire once
 

@@ -7,7 +7,7 @@
  * @param  {function}   fn the function to call
  * @return {null}
  */
-let call = (xs, fn) => [].concat(xs).map((x) => fn(x))
+let call = (xs, fn) => [].concat(xs).map((x, i) => fn(x, i))
 
 /**
  * A factory function that creates an event listener util
@@ -16,7 +16,7 @@ let call = (xs, fn) => [].concat(xs).map((x) => fn(x))
  * @return {function}
  */
 let events = (action) => (x, e, fn) =>
-  call(x, (x) => x[`${action}EventListener`](e, fn))
+  call(x, (x, i) => x[`${action}EventListener`](e, (ev) => fn(ev, i)))
 
 /**
  * A factory function that creates a classList util
