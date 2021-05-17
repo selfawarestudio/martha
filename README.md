@@ -10,15 +10,11 @@
 
 ## Installation
 
----
-
 ```sh
 npm i martha
 ```
 
 ## Usage
-
----
 
 ```js
 import { qs, on } from 'martha'
@@ -41,8 +37,6 @@ function unmount() {
 ```
 
 ## Functions
-
----
 
 ### `off = on(element(s), event, fn)`
 
