@@ -82,6 +82,10 @@ Alias for querySelector
 
 Array-returning alias for querySelectorAll
 
+### `noop()`
+
+Just a noop :-)
+
 ### `clamp(value, min, max)`
 
 Clamp a value between two bounds
