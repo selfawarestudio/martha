@@ -117,7 +117,7 @@ export let size = () => {
 export let index = (el) => Array.from(el.parentNode.children).indexOf(el)
 
 /**
- * Get the index of the provided element amongst it's siblings
+ * Get the ClientRect of the provided element
  *
  * @param {HTMLElement}
  * @return {DOMRect}
