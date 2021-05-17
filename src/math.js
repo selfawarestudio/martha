@@ -40,7 +40,7 @@ export let distance = (x1, y1, x2, y2) => diagonal(x1 - x2, y1 - y2)
 export let lerp = (v0, v1, t) => v0 * (1 - t) + v1 * t
 
 /**
- * Re-maps a number from one range to another
+ * Maps a value to a new range
  *
  * @param  {number} value  The incoming value to be converted
  * @param  {number} start1 Lower bound of the value's current range
