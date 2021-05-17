@@ -6,9 +6,8 @@
  * @param  {number} max Maximum boundary
  * @return {number}     Clamped value
  */
-export function clamp(value, min = 0, max = 1) {
-  return value < min ? min : value > max ? max : value
-}
+export let clamp = (value, min = 0, max = 1) =>
+  value < min ? min : value > max ? max : value
 
 /**
  * Diagonal of a rectangle
@@ -17,9 +16,7 @@ export function clamp(value, min = 0, max = 1) {
  * @param  {number} h Height
  * @return {number}   Diagonal length
  */
-export function diagonal(w, h) {
-  return Math.sqrt(w * w + h * h)
-}
+export let diagonal = (w, h) => Math.sqrt(w * w + h * h)
 
 /**
  * Distance between two points
@@ -30,9 +27,7 @@ export function diagonal(w, h) {
  * @param  {number} y2 Y coord of the second point
  * @return {number}    Computed distance
  */
-export function distance(x1, y1, x2, y2) {
-  return diagonal(x1 - x2, y1 - y2)
-}
+export let distance = (x1, y1, x2, y2) => diagonal(x1 - x2, y1 - y2)
 
 /**
  * Linear interpolation (lerp)
@@ -42,9 +37,7 @@ export function distance(x1, y1, x2, y2) {
  * @param  {number} t  progress
  * @return {number}    Interpolated value
  */
-export function lerp(v0, v1, t) {
-  return v0 * (1 - t) + v1 * t
-}
+export let lerp = (v0, v1, t) => v0 * (1 - t) + v1 * t
 
 /**
  * Re-maps a number from one range to another
@@ -56,9 +49,8 @@ export function lerp(v0, v1, t) {
  * @param  {number} stop2  Upper bound of the value's target range
  * @return {number}        Remapped number
  */
-export function map(value, start1, stop1, start2, stop2) {
-  return ((value - start1) / (stop1 - start1)) * (stop2 - start2) + start2
-}
+export let map = (value, start1, stop1, start2, stop2) =>
+  ((value - start1) / (stop1 - start1)) * (stop2 - start2) + start2
 
 /**
  * Normalize a value between two bounds
@@ -68,9 +60,7 @@ export function map(value, start1, stop1, start2, stop2) {
  * @param  {number} max   Maximum boundary
  * @return {number}       Normalized value
  */
-export function norm(value, min, max) {
-  return (value - min) / (max - min)
-}
+export let norm = (value, min, max) => (value - min) / (max - min)
 
 /**
  * Rounds a value
@@ -79,9 +69,7 @@ export function norm(value, min, max) {
  * @param  {number} p  Precision
  * @return {number}    Rounded value
  */
-export function round(v, p = 1000) {
-  return Math.round(v * p) / p
-}
+export let round = (v, p = 1000) => Math.round(v * p) / p
 
 /**
  * Wrap an index around the given length using the modulo operator
@@ -94,12 +82,9 @@ export function round(v, p = 1000) {
  * @param  {number} length Length
  * @return {number}        Looped index
  */
-export function wrap(index, length) {
-  if (index < 0) {
-    index = length + (index % length)
-  }
-  if (index >= length) {
-    return index % length
-  }
-  return index
-}
+export let wrap = (index, length) =>
+  index < 0
+    ? (index = length + (index % length))
+    : index >= length
+    ? index % length
+    : index

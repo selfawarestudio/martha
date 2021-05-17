@@ -1,14 +1,23 @@
 {
   "name": "martha",
-  "version": "1.0.3",
-  "description": "🥪 A tiny (~700b gzipped) collection of convenient JavaScript utilities.",
+  "version": "2.0.0",
+  "description": "🍑 A tiny ~650b collection of convenient JavaScript utilities.",
   "source": "src/index.js",
   "main": "dist/martha.js",
-  "module": "dist/martha.modern.js",
+  "module": "dist/martha.esm.js",
   "unpkg": "dist/martha.umd.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/martha.modern.js",
+      "umd": "./dist/martha.umd.js",
+      "import": "./dist/martha.esm.js",
+      "require": "./dist/martha.js"
+    }
+  },
   "scripts": {
-    "build": "microbundle --external none -f modern,cjs,umd",
-    "dev": "microbundle watch --external none -f modern,cjs,umd"
+    "build": "microbundle build",
+    "watch": "microbundle watch",
+    "example": "parcel example/index.html"
   },
   "repository": "selfawarestudio/martha",
   "keywords": [
@@ -24,7 +33,8 @@
   "author": "Mike Wagz <mike@selfaware.studio> (http://selfaware.studio)",
   "license": "MIT",
   "devDependencies": {
-    "microbundle": "^0.12.0-next.8"
+    "microbundle": "^0.13.0",
+    "parcel-bundler": "^1.12.5"
   },
   "sideEffects": false
 }

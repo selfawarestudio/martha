@@ -7,13 +7,7 @@
  * @param  {function}   fn the function to call
  * @return {null}
  */
-function call(x, fn) {
-  if (Array.isArray(x)) {
-    for (let i = 0; i < x.length; i++) fn(x[i])
-  } else {
-    return fn(x)
-  }
-}
+let call = (xs, fn) => [].concat(xs).map((x) => fn(x))
 
 /**
  * A factory function that creates an event listener util
@@ -21,9 +15,8 @@ function call(x, fn) {
  * @param  {string}     action 'add' or 'remove'
  * @return {function}
  */
-function events(action) {
-  return (x, e, fn) => call(x, (x) => x[`${action}EventListener`](e, fn))
-}
+let events = (action) => (x, e, fn) =>
+  call(x, (x) => x[`${action}EventListener`](e, fn))
 
 /**
  * A factory function that creates a classList util
@@ -31,9 +24,10 @@ function events(action) {
  * @param  {string}    action 'add', 'remove', 'toggle', or 'contains'
  * @return {function}
  */
-function classes(action) {
-  return (x, ...cn) => call(x, (x) => x.classList[action](...cn))
-}
+let classes =
+  (action) =>
+  (x, ...cn) =>
+    call(x, (x) => x.classList[action](...cn))
 
 /**
  * Add an event listener to one element or an array of elements.
@@ -44,7 +38,7 @@ function classes(action) {
  * @param  {function}    cb callback function
  * @return {function}
  */
-export function on(x, ev, cb) {
+export let on = (x, ev, cb) => {
   events('add')(x, ev, cb)
   return () => events('remove')(x, ev, cb)
 }
@@ -55,11 +49,13 @@ export function on(x, ev, cb) {
  * @param  {string}     action 'add' or 'remove' + 'EventListener'
  * @return {void}
  */
-export function once(x, e, fn) {
-  events('add')(x, e, function f(ev) {
+export let once = (x, e, fn) => {
+  let f = (ev) => {
     events('remove')(x, e, f)
     fn(ev)
-  })
+  }
+
+  events('add')(x, e, f)
 }
 
 /**
@@ -69,9 +65,7 @@ export function once(x, e, fn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function add(x, ...cn) {
-  classes('add')(x, ...cn)
-}
+export let add = (x, cns) => classes('add')(x, ...cns.split(' '))
 
 /**
  * classList shorthand for removing classes from elements
@@ -80,9 +74,7 @@ export function add(x, ...cn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function remove(x, ...cn) {
-  classes('remove')(x, ...cn)
-}
+export let remove = (x, cns) => classes('remove')(x, ...cns.split(' '))
 
 /**
  * classList shorthand for toggling classes on elements
@@ -91,30 +83,27 @@ export function remove(x, ...cn) {
  * @param  {string}     cn classname
  * @return {void}
  */
-export function toggle(x, ...cn) {
-  classes('toggle')(x, ...cn)
-}
+export let toggle = (x, cns) => classes('toggle')(x, ...cns.split(' '))
 
 /**
- * classList shorthand for checking if an element contains a classname
+ * classList shorthand for checking if elements contain a given classname
  *
- * @param  {string}     x element
+ * @param  {string}     x an element or an array of elements
  * @param  {string}     cn classname
  * @return {boolean}
  */
-export function has(x, cn) {
-  return x.classList.contains(cn)
-}
+export let has = (x, cn) => classes('contains')(x, cn).every((v) => v)
 
 /**
  * Get dimensions and pixel density of viewport
  *
  * @return {object}
  */
-export function size() {
+export let size = () => {
+  let d = window.document.documentElement
   return {
-    ww: window.innerWidth,
-    wh: window.innerHeight,
+    ww: d.clientWidth,
+    wh: d.clientHeight,
     dpr: window.devicePixelRatio,
   }
 }
@@ -125,9 +114,7 @@ export function size() {
  * @param {HTMLElement}
  * @return {number}
  */
-export function index(el) {
-  return Array.from(el.parentNode.children).indexOf(el)
-}
+export let index = (el) => Array.from(el.parentNode.children).indexOf(el)
 
 /**
  * Get the index of the provided element amongst it's siblings
@@ -135,9 +122,10 @@ export function index(el) {
  * @param {HTMLElement}
  * @return {DOMRect}
  */
-export function rect(el) {
-  return el?.getBoundingClientRect?.()
-}
+export let rect = (el) =>
+  el && typeof el.getBoundingClientRect === 'function'
+    ? el.getBoundingClientRect()
+    : null
 
 /**
  * Alias for querySelector
@@ -146,9 +134,8 @@ export function rect(el) {
  * @param {HTMLElement}    container
  * @return {HTMLElement}
  */
-export function qs(selector, container = document) {
-  return container.querySelector(selector)
-}
+export let qs = (selector, container = document) =>
+  container.querySelector(selector)
 
 /**
  * Array-returning alias for querySelectorAll
@@ -157,6 +144,5 @@ export function qs(selector, container = document) {
  * @param {HTMLElement}    container
  * @return {array}
  */
-export function qsa(selector, container = document) {
-  return [].slice.call(container.querySelectorAll(selector))
-}
+export let qsa = (selector, container = document) =>
+  Array.from(container.querySelectorAll(selector))

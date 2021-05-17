@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Martha Example</title>
+    <link
+      href="https://www.unpkg.com/@selfaware/wool@1.0.4/dist/wool.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1 class="fw400">Martha Examples</h1>
+    <div class="ba p10">
+      <div class="mb10 mn5">
+        <button class="m5 js-onceButton">Log Once</button>
+        <button class="m5 js-addButton">Add Event Listeners</button>
+        <button class="m5 js-removeButton">Remove Event Listeners</button>
+        <button class="m5 js-checkButton">
+          Has every button been clicked?
+        </button>
+      </div>
+      <button class="js-buttons">Button 1</button>
+      <button class="js-buttons">Button 2</button>
+      <button class="js-buttons">Button 3</button>
+    </div>
+
+    <script type="module">
+      import choozy from 'https://cdn.skypack.dev/choozy'
+      import { on, add, has, once } from './martha.modern.js'
+
+      const { onceButton, buttons, addButton, removeButton, checkButton } =
+        choozy()
+
+      let off = null
+
+      once(onceButton, 'click', () => {
+        console.log('Once')
+      })
+
+      on(addButton, 'click', () => {
+        if (off) return
+
+        off = on(buttons, 'click', (ev) => {
+          console.log(ev.currentTarget.textContent)
+          add(ev.currentTarget, 'bg-black c-white')
+        })
+      })
+
+      on(removeButton, 'click', () => {
+        off && off()
+        off = null
+      })
+
+      on(checkButton, 'click', checkButtonClasses)
+
+      function checkButtonClasses() {
+        if (has(buttons, 'bg-black')) {
+          console.log('Yes', buttons)
+        } else {
+          console.log('No', buttons)
+        }
+      }
+    </script>
+  </body>
+</html>
