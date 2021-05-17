@@ -1,6 +1,6 @@
 {
   "name": "martha",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "🍑 A tiny collection of convenient JavaScript utilities.",
   "source": "src/index.js",
   "main": "dist/martha.js",

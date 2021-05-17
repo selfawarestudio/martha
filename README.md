@@ -25,7 +25,7 @@ function mount() {
   let button = qs('button')
 
   // add click handler on button
-  offClick = onClick(button, () => {
+  offClick = on(button, 'click', () => {
     console.log('click!')
   })
 }
