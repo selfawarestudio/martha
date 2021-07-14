@@ -228,19 +228,12 @@ export let norm = (value, min, max) => (value - min) / (max - min)
 export let round = (v, p = 1000) => Math.round(v * p) / p
 
 /**
- * Wrap an index around the given length using the modulo operator
+ * Wrap a value around the given start and end using the modulo operator
  *
- * e.g. wrap(1, 3) // 1
- *      wrap(3, 3) // 0
- *      wrap(-1, 3) // 2
- *
- * @param  {number} index  Index
- * @param  {number} length Length
- * @return {number}        Looped index
+ * @param  {number} value  Value to wrap
+ * @param  {number} start  Lower limit
+ * @param  {number} end    Upper limit
+ * @return {number}        Wrapped value
  */
-export let wrap = (index, length) =>
-  index < 0
-    ? (index = length + (index % length))
-    : index >= length
-    ? index % length
-    : index
+export let wrap = (value, start, end) =>
+  start + ((value - start) % (end - start))
