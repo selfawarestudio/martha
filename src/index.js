@@ -230,10 +230,9 @@ export let round = (v, p = 1000) => Math.round(v * p) / p
 /**
  * Wrap a value around the given start and end using the modulo operator
  *
- * @param  {number} value  Value to wrap
- * @param  {number} start  Lower limit
- * @param  {number} end    Upper limit
- * @return {number}        Wrapped value
+ * @param  {number} x  Value to wrap
+ * @param  {number} a  Lower limit
+ * @param  {number} b  Upper limit
+ * @return {number}    Wrapped value
  */
-export let wrap = (value, start, end) =>
-  start + ((value - start) % (end - start))
+export let wrap = (x, a, b) => ((x - a) % (b - a + 1)) + a
