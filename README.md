@@ -114,6 +114,6 @@ Normalize a value between two bounds
 
 Rounds a value to the given precision
 
-### `wrap(value, start, end)`
+### `wrap(index, length)`
 
-Wrap a value around the given start and end using the modulo operator
+Wrap an index around the given length using the modulo operator
