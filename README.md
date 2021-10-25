@@ -64,7 +64,7 @@ Check if element or array of elements contain the provided classname. Returns a 
 
 ### `{ ww, wh, dpr } = size()`
 
-Returns an object containing window width (`ww`) and height (`wh`) as well as pixel density (`dpr`)
+Returns an object containing window width (`ww`) and height (`wh`) using the [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) (if available), as well as pixel density (`dpr`)
 
 ### `index(element)`
 

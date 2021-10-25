@@ -100,10 +100,9 @@ export let has = (x, cn) => classes('contains')(x, cn).every((v) => v)
  * @return {object}
  */
 export let size = () => {
-  let d = window.document.documentElement
   return {
-    ww: d.clientWidth,
-    wh: d.clientHeight,
+    ww: window?.visualViewport?.width ?? window.innerWidth,
+    wh: window?.visualViewport?.height ?? window.innerHeight,
     dpr: window.devicePixelRatio,
   }
 }
