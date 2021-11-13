@@ -15,8 +15,10 @@ let call = (xs, fn) => [].concat(xs).map(fn)
  * @param  {string}     action 'add' or 'remove'
  * @return {function}
  */
-let events = (action) => (xs, e, fn) =>
-  call(xs, (x) => x[`${action}EventListener`](e, fn))
+let events =
+  (action) =>
+  (xs, e, fn, opts = false) =>
+    call(xs, (x) => x[`${action}EventListener`](e, fn, opts))
 
 /**
  * A factory function that creates a classList util
@@ -38,9 +40,9 @@ let classes =
  * @param  {function}    cb callback function
  * @return {function}
  */
-export let on = (x, ev, fn) => {
+export let on = (x, ev, fn, opts) => {
   events('add')(x, ev, fn)
-  return () => events('remove')(x, ev, fn)
+  return () => events('remove')(x, ev, fn, opts)
 }
 
 /**
@@ -49,13 +51,16 @@ export let on = (x, ev, fn) => {
  * @param  {string}     action 'add' or 'remove' + 'EventListener'
  * @return {void}
  */
-export let once = (x, e, fn) => {
-  let f = (ev) => {
-    events('remove')(x, e, f)
-    fn(ev)
-  }
-
-  events('add')(x, e, f)
+export let once = (x, e, fn, opts) => {
+  events('add')(
+    x,
+    e,
+    (ev) => {
+      events('remove')(x, e, f, opts)
+      fn(ev)
+    },
+    opts,
+  )
 }
 
 /**
