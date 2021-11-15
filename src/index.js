@@ -56,7 +56,7 @@ export let once = (x, e, fn, opts) => {
     x,
     e,
     (ev) => {
-      events('remove')(x, e, f, opts)
+      events('remove')(x, e, fn, opts)
       fn(ev)
     },
     opts,
