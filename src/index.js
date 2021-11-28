@@ -52,11 +52,11 @@ export let on = (x, ev, fn, opts) => {
  * @return {void}
  */
 export let once = (x, e, fn, opts) => {
-  events('add')(
+  let off = on(
     x,
     e,
     (ev) => {
-      events('remove')(x, e, fn, opts)
+      off()
       fn(ev)
     },
     opts,
