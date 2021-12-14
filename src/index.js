@@ -100,6 +100,19 @@ export let toggle = (x, cns) => classes('toggle')(x, ...cns.split(' '))
 export let has = (x, cn) => classes('contains')(x, cn).every((v) => v)
 
 /**
+ * Iterate over an array like forEach
+ *
+ * @param  {*}          xs an array
+ * @param  {function}   fn the function to call for each item in the array
+ * @return {null}
+ */
+export let each = (xs, fn) => {
+  for (let i = 0, l = xs.length; i < l; i++) {
+    fn(xs[i], i)
+  }
+}
+
+/**
  * Get dimensions and pixel density of viewport
  *
  * @return {object}
