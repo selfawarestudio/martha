@@ -1,9 +1,10 @@
-export type Events<T> = (
-  xs: EventTarget | EventTarget[],
-  ev: string,
-  fn: EventListener,
-  opts?: boolean | AddEventListenerOptions | undefined,
-) => T
+export type EventMap<T> = T extends Window
+  ? WindowEventMap
+  : T extends Document
+  ? DocumentEventMap
+  : T extends Element
+  ? ElementEventMap
+  : { [key: string]: Event }
 
 /**
  * @param xs A value or array of values
@@ -20,9 +21,14 @@ let call = <T, U>(xs: T | T[], fn: (x: T, i: number) => U): U[] => {
  * @returns An event listener utility function
  */
 let events =
-  (action: 'add' | 'remove'): Events<any[]> =>
-  (xs, ev, fn, opts) =>
-    call(xs, x => x[`${action}EventListener`](ev, fn, opts))
+  (action: 'add' | 'remove') =>
+  <T extends EventTarget, K extends keyof EventMap<T> & string>(
+    xs: T | T[],
+    t: K,
+    fn: (ev: EventMap<T>[K]) => any,
+    opts?: boolean | AddEventListenerOptions,
+  ) =>
+    call(xs, x => x[`${action}EventListener`](t, fn as EventListener, opts))
 
 /**
  * @param action - 'add' or 'remove'
@@ -39,28 +45,38 @@ let classes =
  * Add an event listener to one element or an array of elements
  *
  * @param xs An element or an array of elements
- * @param ev Event type
- * @param cb Event handler
+ * @param t Event type
+ * @param fn Event handler
  * @param opts The 3rd argument to addEventListener
  * @returns A function to remove the event listener
  */
-export let on: Events<Function> = (xs, ev, fn, opts) => {
-  events('add')(xs, ev, fn, opts)
-  return () => events('remove')(xs, ev, fn, opts)
+export let on = <T extends EventTarget, K extends keyof EventMap<T> & string>(
+  xs: T | T[],
+  t: K,
+  fn: (ev: EventMap<T>[K]) => any,
+  opts?: boolean | AddEventListenerOptions,
+) => {
+  events('add')(xs, t, fn, opts)
+  return () => events('remove')(xs, t, fn, opts)
 }
 
 /**
  * Add an event listener that can only fire once
  *
  * @param xs An element or an array of elements
- * @param ev Event type
- * @param cb Event handler
+ * @param t Event type
+ * @param fn Event handler
  * @param opts The optional 3rd argument to addEventListener
  */
-export let once: Events<void> = (x, ev, fn, opts) => {
+export let once = <T extends EventTarget, K extends keyof EventMap<T> & string>(
+  xs: T | T[],
+  t: K,
+  fn: (ev: EventMap<T>[K]) => any,
+  opts?: boolean | AddEventListenerOptions,
+) => {
   let off = on(
-    x,
-    ev,
+    xs,
+    t,
     ev => {
       off()
       fn(ev)
