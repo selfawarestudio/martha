@@ -150,8 +150,9 @@ export let size = (): {
  * @param el A dom element with siblings
  * @returns The index of the element amongst its siblings
  */
-export let index = (el: Element): number =>
-  Array.from(el.parentNode?.children ?? []).indexOf(el)
+export let index = (el: Element): number => {
+  return Array.from(el.parentNode ? el.parentNode.children : []).indexOf(el)
+}
 
 /**
  * Get the DOMRect of the provided element
