@@ -1,20 +1,17 @@
 export type Events<T> = (
-  xs: Element | Element[],
-  ev: keyof HTMLElementEventMap,
-  fn: (ev: Event) => any,
+  xs: EventTarget | EventTarget[],
+  ev: string,
+  fn: EventListener,
   opts?: boolean | AddEventListenerOptions | undefined,
 ) => T
 
 /**
- * @param xs An element or array of elements
+ * @param xs A value or array of values
  * @param fn The function to call
- * @returns A new array populated with the results of calling the provided function on the element or array of elements
+ * @returns A new array populated with the results of calling the provided function on the value or array of values
  */
-let call = <T>(
-  xs: Element | Element[],
-  fn: (x: Element, i: number) => T,
-): T[] => {
-  let tmp: Element[] = []
+let call = <T, U>(xs: T | T[], fn: (x: T, i: number) => U): U[] => {
+  let tmp: T[] = []
   return tmp.concat(xs).map(fn)
 }
 
