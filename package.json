@@ -2,39 +2,66 @@
   "name": "martha",
   "version": "3.1.4",
   "description": "🍑 A tiny collection of convenient JavaScript utilities.",
-  "source": "src/index.js",
-  "main": "dist/martha.js",
-  "module": "dist/martha.esm.js",
-  "unpkg": "dist/martha.umd.js",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/martha.umd.js",
+  "unpkg": "dist/martha.iife.js",
+  "jsdelivr": "dist/martha.iife.js",
+  "module": "./dist/martha.es.js",
   "exports": {
     ".": {
-      "browser": "./dist/martha.modern.js",
-      "umd": "./dist/martha.umd.js",
-      "import": "./dist/martha.esm.js",
-      "require": "./dist/martha.js"
+      "import": "./dist/martha.es.js",
+      "require": "./dist/martha.umd.js"
     }
   },
+  "types": "./dist/types/index.d.ts",
   "scripts": {
-    "build": "microbundle build",
-    "watch": "microbundle watch",
-    "example": "parcel example/index.html"
+    "dev": "watchlist lib -- pnpm test",
+    "build": "vite build && tsc --emitDeclarationOnly && mv dist/lib dist/types",
+    "test": "c8 uvu -r esbuild-register lib/__tests__",
+    "prepare": "is-ci || pnpx husky install",
+    "typecheck": "tsc --noEmit",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
-  "repository": "selfawarestudio/martha",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/selfawarestudio/martha.git"
+  },
   "keywords": [
-    "util",
-    "utils",
     "utilities",
+    "helpers",
     "dom",
     "math",
     "events",
     "lerp"
   ],
-  "homepage": "https://github.com/selfawarestudio/martha",
-  "author": "Mike Wagz <mike@selfaware.studio> (http://selfaware.studio)",
+  "author": "Mike Wagz",
   "license": "MIT",
-  "devDependencies": {
-    "microbundle": "^0.13.0",
-    "parcel-bundler": "^1.12.5"
+  "bugs": {
+    "url": "https://github.com/selfawarestudio/martha/issues"
   },
-  "sideEffects": false
+  "homepage": "https://github.com/selfawarestudio/martha#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^16.0.1",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^17.0.5",
+    "@types/sinon": "^10.0.6",
+    "c8": "^7.10.0",
+    "commitlint": "^16.0.1",
+    "esbuild": "^0.14.9",
+    "esbuild-register": "^3.3.1",
+    "husky": "^7.0.4",
+    "is-ci": "^3.0.1",
+    "jsdom": "^19.0.0",
+    "prettier": "^2.5.1",
+    "semantic-release": "^18.0.1",
+    "sinon": "^12.0.1",
+    "typescript": "^4.5.4",
+    "uvu": "^0.5.2",
+    "vite": "^2.7.9",
+    "watchlist": "^0.3.1"
+  }
 }

@@ -1,6 +1,4 @@
-dist
-node_modules
-npm-debug.log
 .DS_Store
-.vscode
-.cache
+node_modules
+dist
+coverage

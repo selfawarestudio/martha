@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      # pnpm stuff
+      - name: pnpm — install
+        run: npm i pnpm@latest -g
+      - name: pnpm - config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: pnpm - install
+        run: pnpm install
+
+      # build
+      - name: lint
+        run: pnpm lint
+      - name: build
+        run: pnpm build
+      - name: test
+        run: pnpm t
+
+      - name: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # release
+      - name: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm exec semantic-release -d

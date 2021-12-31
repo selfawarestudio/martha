@@ -1,0 +1,287 @@
+export type Events<T> = (
+  xs: Element | Element[],
+  ev: keyof HTMLElementEventMap,
+  fn: (ev: Event) => any,
+  opts?: boolean | AddEventListenerOptions | undefined,
+) => T
+
+/**
+ * @param xs An element or array of elements
+ * @param fn The function to call
+ * @returns A new array populated with the results of calling the provided function on the element or array of elements
+ */
+let call = <T>(
+  xs: Element | Element[],
+  fn: (x: Element, i: number) => T,
+): T[] => {
+  let tmp: Element[] = []
+  return tmp.concat(xs).map(fn)
+}
+
+/**
+ * @param action 'add' or 'remove'
+ * @returns An event listener utility function
+ */
+let events =
+  (action: 'add' | 'remove'): Events<any[]> =>
+  (xs, ev, fn, opts) =>
+    call(xs, x => x[`${action}EventListener`](ev, fn, opts))
+
+/**
+ * @param action - 'add' or 'remove'
+ * @returns A classList utility function
+ */
+let classes =
+  (
+    action: 'add' | 'remove',
+  ): ((xs: Element | Element[], ...cn: string[]) => any[]) =>
+  (xs, cns) =>
+    call(xs, x => x.classList[action](...cns.split(' ')))
+
+/**
+ * Add an event listener to one element or an array of elements
+ *
+ * @param xs An element or an array of elements
+ * @param ev Event type
+ * @param cb Event handler
+ * @param opts The 3rd argument to addEventListener
+ * @returns A function to remove the event listener
+ */
+export let on: Events<Function> = (xs, ev, fn, opts) => {
+  events('add')(xs, ev, fn, opts)
+  return () => events('remove')(xs, ev, fn, opts)
+}
+
+/**
+ * Add an event listener that can only fire once
+ *
+ * @param xs An element or an array of elements
+ * @param ev Event type
+ * @param cb Event handler
+ * @param opts The optional 3rd argument to addEventListener
+ */
+export let once: Events<void> = (x, ev, fn, opts) => {
+  let off = on(
+    x,
+    ev,
+    ev => {
+      off()
+      fn(ev)
+    },
+    opts,
+  )
+}
+
+/**
+ * classList shorthand for adding classes to an element or array of elements
+ *
+ * @param xs An element or an array of elements
+ * @param cn Classnames to add
+ */
+export let add = (xs: Element | Element[], cns: string): void => {
+  classes('add')(xs, cns)
+}
+
+/**
+ * classList shorthand for removing classes from an element or array of elements
+ *
+ * @param xs An element or an array of elements
+ * @param cn Classnames to remove
+ */
+export let remove = (xs: Element | Element[], cns: string): void => {
+  classes('remove')(xs, cns)
+}
+
+/**
+ * classList shorthand for toggling classes on an element or array of elements
+ *
+ * @param x An element or an array of elements
+ * @param cn Single classname to toggle
+ */
+export let toggle = (
+  xs: Element | Element[],
+  cn: string,
+  force?: boolean,
+): void => {
+  call(xs, x => x.classList.toggle(cn, force))
+}
+
+/**
+ * classList shorthand for checking if an element or an array of elements contain a given classname
+ *
+ * @param xs An element or an array of elements
+ * @param cn Single classname
+ * @returns True if every element contains provided classname and false if not
+ */
+export let has = (xs: Element | Element[], cn: string): boolean => {
+  return call(xs, x => x.classList.contains(cn)).every(v => v)
+}
+
+/**
+ * Iterate over each item in an array like forEach
+ *
+ * @param xs Array
+ * @param fn Function to call for each item in the provided array
+ */
+export let each = <T>(xs: T[], fn: (x: T, i: number) => void) => {
+  for (let i = 0, l = xs.length; i < l; i++) {
+    fn(xs[i], i)
+  }
+}
+
+/**
+ * @returns Object containing viewport dimensions and pixel density
+ */
+export let size = (): {
+  ww: number
+  wh: number
+  dpr: number
+} => {
+  return {
+    ww: window.innerWidth,
+    wh: window.innerHeight,
+    dpr: window.devicePixelRatio,
+  }
+}
+
+/**
+ * Get the index of the provided element amongst its siblings
+ *
+ * @param el A dom element with siblings
+ * @returns The index of the element amongst its siblings
+ */
+export let index = (el: Element): number =>
+  Array.from(el.parentNode?.children ?? []).indexOf(el)
+
+/**
+ * Get the DOMRect of the provided element
+ *
+ * @param el A dom element
+ * @returns The DOMRect or null
+ */
+export let rect = (el: Element): DOMRect | null => el.getBoundingClientRect()
+
+/**
+ * Alias for querySelector
+ *
+ * @param selector
+ * @param container
+ * @returns The selected element
+ */
+export let qs = (selector: string, container: ParentNode = document) =>
+  container.querySelector(selector)
+
+/**
+ * Array-returning alias for querySelectorAll
+ *
+ * @param selector
+ * @param container
+ * @returns Array of elements
+ */
+export let qsa = (
+  selector: string,
+  container: ParentNode = document,
+): HTMLElement[] => Array.from(container.querySelectorAll(selector))
+
+/**
+ * Noop
+ */
+export let noop = () => {}
+
+/**
+ * Clamp a value between two bounds
+ *
+ * @param v Value to clamp
+ * @param min Minimum boundary
+ * @param max Maximum boundary
+ * @returns Clamped value
+ */
+export let clamp = (value: number, min = 0, max = 1): number =>
+  value < min ? min : value > max ? max : value
+
+/**
+ * Diagonal of a rectangle
+ *
+ * @param w Width
+ * @param h Height
+ * @returns Diagonal length
+ */
+export let diagonal = (w: number, h: number): number => Math.sqrt(w * w + h * h)
+
+/**
+ * Distance between two points
+ *
+ * @param x1 X coord of the first point
+ * @param y1 Y coord of the first point
+ * @param x2 X coord of the second point
+ * @param y2 Y coord of the second point
+ * @returns Computed distance
+ */
+export let distance = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): number => diagonal(x1 - x2, y1 - y2)
+
+/**
+ * Linear interpolation (lerp)
+ *
+ * @param v0 current value
+ * @param v1 target value
+ * @param t progress
+ * @returns Interpolated value
+ */
+export let lerp = (v0: number, v1: number, t: number): number =>
+  v0 * (1 - t) + v1 * t
+
+/**
+ * Maps a value to a new range
+ *
+ * @param value The incoming value to be converted
+ * @param start1 Lower bound of the value's current range
+ * @param stop1 Upper bound of the value's current range
+ * @param start2 Lower bound of the value's target range
+ * @param stop2 Upper bound of the value's target range
+ * @returns Remapped number
+ */
+export let map = (
+  value: number,
+  start1: number,
+  stop1: number,
+  start2: number,
+  stop2: number,
+): number => ((value - start1) / (stop1 - start1)) * (stop2 - start2) + start2
+
+/**
+ * Normalize a value between two bounds
+ *
+ * @param value Value to normalize
+ * @param min Minimum boundary
+ * @param max Maximum boundary
+ * @returns Normalized value
+ */
+export let norm = (value: number, min: number, max: number): number =>
+  (value - min) / (max - min)
+
+/**
+ * Rounds a value
+ *
+ * @param v Value to round
+ * @param p Precision
+ * @returns Rounded value
+ */
+export let round = (v: number, p = 3): number => {
+  let f = 10 ** p
+  return Math.round(v * f) / f
+}
+
+/**
+ * Wrap a number around the given length using the modulo operator
+ *
+ * @param n Number
+ * @param l Length
+ * @returns Looped index
+ */
+export let wrap = (n: number, l: number): number =>
+  n < 0 ? l + (n % l) : n >= l ? n % l : n
