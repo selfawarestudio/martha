@@ -164,16 +164,16 @@ export let size = (): {
  * @returns The index of the element amongst its siblings
  */
 export let index = (el: Element): number => {
-  return Array.from(el.parentNode ? el.parentNode.children : []).indexOf(el)
+  return Array.from(el.parentNode?.children ?? []).indexOf(el)
 }
 
 /**
  * Get the DOMRect of the provided element
  *
  * @param el A dom element
- * @returns The DOMRect or null
+ * @returns The DOMRect of the element
  */
-export let rect = (el: Element): DOMRect | null => el.getBoundingClientRect()
+export let rect = (el: Element): DOMRect => el.getBoundingClientRect()
 
 /**
  * Alias for querySelector
@@ -182,7 +182,7 @@ export let rect = (el: Element): DOMRect | null => el.getBoundingClientRect()
  * @param container
  * @returns The selected element
  */
-export let qs = (selector: string, container: ParentNode = document) =>
+export let qs = (selector: string, container: Element | Document = document) =>
   container.querySelector(selector)
 
 /**
@@ -194,7 +194,7 @@ export let qs = (selector: string, container: ParentNode = document) =>
  */
 export let qsa = (
   selector: string,
-  container: ParentNode = document,
+  container: Element | Document = document,
 ): HTMLElement[] => Array.from(container.querySelectorAll(selector))
 
 /**

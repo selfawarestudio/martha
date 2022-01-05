@@ -3,7 +3,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   build: {
-    target: 'esnext',
+    target: 'es2019',
     minify: 'esbuild',
     lib: {
       entry: resolve(__dirname, 'lib/index.ts'),

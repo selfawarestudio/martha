@@ -18,14 +18,18 @@ npm i martha
 
 ```js
 import { qs, on } from 'martha'
+
 let off
+
 function mount() {
   let button = qs('button')
+  
   // add click handler on button
   off = on(button, 'click', () => {
     console.log('click!')
   })
 }
+
 function unmount() {
   // remove click handler from button
   off()
@@ -34,82 +38,86 @@ function unmount() {
 
 ## Functions
 
-### `off = on(el|els, event, callback)`
+`off = on(el|els, event, callback)`
 
 Add event listener(s) to element or an array of elements. Returns a function to remove the listener(s)
 
-### `once(el|els, event, callback)`
+`once(el|els, event, callback)`
 
 Add event listener(s) to element or array of elements and fire once
 
-### `add(el|els, cx)`
+`add(el|els, cx)`
 
 Add provided class(es) to element or array of elements. Multiple classnames should be separated by a space within the string.
 
-### `remove(el|els, cx)`
+`remove(el|els, cx)`
 
 Remove provided class(es) from element or array of elements. Multiple classnames should be separated by a space within the string.
 
-### `toggle(el|els, cx)`
+`toggle(el|els, cx)`
 
-Toggle provided class(es) from element or array of elements. Multiple classnames should be separated by a space within the string.
+Toggle provided class from element or array of elements. 
 
-### `has(el|els, cn)`
+`has(el|els, cn)`
 
 Check if element or array of elements contain the provided classname. Returns a boolean.
 
-### `{ ww, wh, dpr } = size()`
+`each(array, callback)`
 
-Returns an object containing window width (`ww`) and height (`wh`) using the [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API) (if available), as well as pixel density (`dpr`)
+Iterate over each item in an array like `forEach`
 
-### `index(element)`
+`{ ww, wh, dpr } = size()`
+
+Returns an object containing viewport width (`ww`) and height (`wh`) and pixel density (`dpr`)
+
+`index(el)`
 
 Returns the index of the provided element amongst it's siblings
 
-### `rect(element)`
+`rect(el)`
 
-Returns the ClientRect of the provided element
+Returns the DOMRect of the provided element
 
-### `qs(selector, [container = document])`
+`qs(selector, [container = document])`
 
 Alias for querySelector
 
-### `qsa(selector, [container = document])`
+`qsa(selector, [container = document])`
 
 Array-returning alias for querySelectorAll
 
-### `noop()`
+`noop()`
 
 Just a noop :-)
 
-### `clamp(value, min, max)`
+`clamp(value, min, max)`
 
 Clamp a value between two bounds
 
-### `diagonal(width, height)`
+`diagonal(width, height)`
 
 Diagonal of a rectangle
 
-### `distance(x1, y1, x2, y2)`
+`distance(x1, y1, x2, y2)`
 
 Distance between two points
 
-### `lerp(currentValue, targetValue, progress)`
+`lerp(currentValue, targetValue, progress)`
 
 Linear interpolation
 
-### `map(value, start1, stop1, start2, stop2)`
+`map(value, start1, stop1, start2, stop2)`
 
 Maps a value to a new range
 
-### `norm(value, min, max)`
+`norm(value, min, max)`
 
 Normalize a value between two bounds
 
-### `round(value, precision)`
+`round(value, precision)`
 
 Rounds a value to the given precision
 
-### `wrap(index, length)`
+`wrap(index, length)`
 
-Wrap an index around the given length using the modulo operator
+Wrap a number around the given length using the modulo operator
