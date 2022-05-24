@@ -4,7 +4,7 @@
 
 ## Features
 
-- 🔬 Tiny (<850b gzipped)
+- 🔬 Tiny (<1kb gzipped)
 - 🚕 Convenient
 - 🌲 Tree-shakeable
 
