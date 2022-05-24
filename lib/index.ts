@@ -1,10 +1,17 @@
-export type EventMap<T> = T extends Window
-  ? WindowEventMap
+type EventMap<T extends EventTarget> = T extends MediaQueryList
+  ? MediaQueryListEventMap
   : T extends Document
   ? DocumentEventMap
-  : T extends Element
-  ? ElementEventMap
-  : { [key: string]: Event }
+  : T extends Window
+  ? WindowEventMap
+  : HTMLElementEventMap
+
+type EventTypes<T extends EventTarget> = keyof EventMap<T> & string
+
+type EventValue<T extends EventTarget, K extends EventTypes<T>> = Extract<
+  EventMap<T>[K],
+  Event
+>
 
 /**
  * @param xs A value or array of values
@@ -22,10 +29,10 @@ let call = <T, U>(xs: T | T[], fn: (x: T, i: number) => U): U[] => {
  */
 let events =
   (action: 'add' | 'remove') =>
-  <T extends EventTarget, K extends keyof EventMap<T> & string>(
+  <T extends EventTarget, K extends EventTypes<T>>(
     xs: T | T[],
     t: K,
-    fn: (ev: EventMap<T>[K]) => any,
+    fn: (ev: EventValue<T, K>) => void,
     opts?: boolean | AddEventListenerOptions,
   ) =>
     call(xs, x => x[`${action}EventListener`](t, fn as EventListener, opts))
@@ -50,10 +57,10 @@ let classes =
  * @param opts The 3rd argument to addEventListener
  * @returns A function to remove the event listener
  */
-export let on = <T extends EventTarget, K extends keyof EventMap<T> & string>(
+export let on = <T extends EventTarget, K extends EventTypes<T>>(
   xs: T | T[],
   t: K,
-  fn: (ev: EventMap<T>[K]) => any,
+  fn: (ev: EventValue<T, K>) => void,
   opts?: boolean | AddEventListenerOptions,
 ) => {
   events('add')(xs, t, fn, opts)
@@ -68,10 +75,10 @@ export let on = <T extends EventTarget, K extends keyof EventMap<T> & string>(
  * @param fn Event handler
  * @param opts The optional 3rd argument to addEventListener
  */
-export let once = <T extends EventTarget, K extends keyof EventMap<T> & string>(
+export let once = <T extends EventTarget, K extends EventTypes<T>>(
   xs: T | T[],
   t: K,
-  fn: (ev: EventMap<T>[K]) => any,
+  fn: (ev: EventValue<T, K>) => void,
   opts?: boolean | AddEventListenerOptions,
 ) => {
   let off = on(
@@ -128,6 +135,43 @@ export let toggle = (
  */
 export let has = (xs: Element | Element[], cn: string): boolean => {
   return call(xs, x => x.classList.contains(cn)).every(v => v)
+}
+
+/**
+ * Get, set, or remove attributes from an element
+ *
+ * @param x An element
+ * @param n Attribute name
+ * @param v Optional value
+ * @returns Value being get, set, or removed
+ */
+export function attr(x: Element, n: string, v?: any): any {
+  if (arguments.length < 3) {
+    return x.getAttribute(n)
+  } else if (v) {
+    x.setAttribute(n, typeof v === 'boolean' ? '' : v)
+  } else {
+    x.removeAttribute(n)
+  }
+
+  return v
+}
+
+/**
+ * Get or set custom properties
+ *
+ * @param x An element
+ * @param n Property name
+ * @param v Optional value
+ * @returns Value being get or set
+ */
+export function prop(x: HTMLElement, n: string, v?: any): any {
+  if (arguments.length < 3) {
+    return x.style.getPropertyValue(n)
+  } else {
+    x.style.setProperty(n, v)
+    return v
+  }
 }
 
 /**

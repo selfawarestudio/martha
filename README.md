@@ -62,6 +62,14 @@ Toggle provided class from element or array of elements.
 
 Check if element or array of elements contain the provided classname. Returns a boolean.
 
+`attr(el, name[, value])`
+
+Get attribute by passing el and attribute name. With a 3rd argument, set and remove attributes (falsy values remove, true boolean sets to empty string). Always returns the attribute value being retrieved, set, or removed.
+
+`prop(el, name[, value])`
+
+Get custom property value by passing el and property name. With a 3rd argument, you can set properties. Always returns the property value being retrieved or set.
+
 `each(array, callback)`
 
 Iterate over each item in an array like `forEach`

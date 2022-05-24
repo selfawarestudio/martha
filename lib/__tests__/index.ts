@@ -287,6 +287,64 @@ has(
 
 has.run()
 
+let attr = suite('attr')
+
+attr.before(() => {
+  let dom = new JSDOM(`<div></div>`)
+
+  global.window = dom.window
+  global.document = dom.window.document
+})
+
+attr('should set attributes when a value is provided as third arg', () => {
+  let div = m.qs('div')
+
+  m.attr(div, 'foo', 'bar')
+
+  assert.equal(div.getAttribute('foo'), 'bar')
+})
+
+attr('should get attribute value when third arg is undefined', () => {
+  let div = m.qs('div')
+
+  assert.equal(m.attr(div, 'foo'), 'bar')
+})
+
+attr('should remove attribute when third arg is null', () => {
+  let div = m.qs('div')
+
+  m.attr(div, 'foo', null)
+
+  assert.not.ok(div.hasAttribute('foo'))
+})
+
+attr.run()
+
+let prop = suite('prop')
+
+prop.before(() => {
+  let dom = new JSDOM(`<div></div>`)
+
+  global.window = dom.window
+  global.document = dom.window.document
+})
+
+prop('should set property when a value is provided as third arg', () => {
+  let div = m.qs('div')
+
+  m.prop(div as HTMLElement, '--foo', 'bar')
+
+  assert.equal((div as HTMLElement).style.getPropertyValue('--foo'), 'bar')
+})
+
+prop('should get property value when third arg is undefined', () => {
+  let div = m.qs('div')
+
+  assert.equal(m.prop(div as HTMLElement, '--foo'), 'bar')
+})
+
+prop.run()
+
 let each = suite('each')
 
 each('should iterate over each item in the array', () => {
