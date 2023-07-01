@@ -13,14 +13,21 @@ type EventValue<T extends EventTarget, K extends EventTypes<T>> = Extract<
   Event
 >
 
+let error = (msg: string): void => {
+  throw new Error(`[martha] ${msg}`)
+}
+
 /**
  * @param xs A value or array of values
  * @param fn The function to call
  * @returns A new array populated with the results of calling the provided function on the value or array of values
  */
-let call = <T, U>(xs: T | T[], fn: (x: T, i: number) => U): U[] => {
+let call = <T, U>(
+  xs: T | T[] | null | undefined,
+  fn: (x: T, i: number) => U,
+): U[] => {
   let tmp: T[] = []
-  return tmp.concat(xs).map(fn)
+  return tmp.concat(xs ?? []).map(fn)
 }
 
 /**
@@ -30,12 +37,17 @@ let call = <T, U>(xs: T | T[], fn: (x: T, i: number) => U): U[] => {
 let events =
   (action: 'add' | 'remove') =>
   <T extends EventTarget, K extends EventTypes<T>>(
-    xs: T | T[],
+    xs: T | T[] | null | undefined,
     t: K,
     fn: (ev: EventValue<T, K>) => void,
     opts?: boolean | AddEventListenerOptions,
-  ) =>
-    call(xs, x => x[`${action}EventListener`](t, fn as EventListener, opts))
+  ) => {
+    if (!xs)
+      error(`${action === 'add' ? 'on' : 'off'} target is null or undefined`)
+    return call(xs, x =>
+      x[`${action}EventListener`](t, fn as EventListener, opts),
+    )
+  }
 
 /**
  * @param action - 'add' or 'remove'
@@ -44,9 +56,11 @@ let events =
 let classes =
   (
     action: 'add' | 'remove',
-  ): ((xs: Element | Element[], ...cn: string[]) => any[]) =>
-  (xs, cns) =>
-    call(xs, x => x.classList[action](...cns.split(' ')))
+  ): ((xs: Element | Element[] | null | undefined, ...cn: string[]) => any[]) =>
+  (xs, cns) => {
+    if (!xs) error(`${action} target is null or undefined`)
+    return call(xs, x => x.classList[action](...cns.split(' ')))
+  }
 
 /**
  * Add an event listener to one element or an array of elements
@@ -58,7 +72,7 @@ let classes =
  * @returns A function to remove the event listener
  */
 export let on = <T extends EventTarget, K extends EventTypes<T>>(
-  xs: T | T[],
+  xs: T | T[] | null | undefined,
   t: K,
   fn: (ev: EventValue<T, K>) => void,
   opts?: boolean | AddEventListenerOptions,
@@ -76,7 +90,7 @@ export let on = <T extends EventTarget, K extends EventTypes<T>>(
  * @param opts The optional 3rd argument to addEventListener
  */
 export let once = <T extends EventTarget, K extends EventTypes<T>>(
-  xs: T | T[],
+  xs: T | T[] | null | undefined,
   t: K,
   fn: (ev: EventValue<T, K>) => void,
   opts?: boolean | AddEventListenerOptions,
@@ -98,7 +112,10 @@ export let once = <T extends EventTarget, K extends EventTypes<T>>(
  * @param xs An element or an array of elements
  * @param cn Classnames to add
  */
-export let add = (xs: Element | Element[], cns: string): void => {
+export let add = (
+  xs: Element | Element[] | null | undefined,
+  cns: string,
+): void => {
   classes('add')(xs, cns)
 }
 
@@ -108,7 +125,10 @@ export let add = (xs: Element | Element[], cns: string): void => {
  * @param xs An element or an array of elements
  * @param cn Classnames to remove
  */
-export let remove = (xs: Element | Element[], cns: string): void => {
+export let remove = (
+  xs: Element | Element[] | null | undefined,
+  cns: string,
+): void => {
   classes('remove')(xs, cns)
 }
 
@@ -119,10 +139,11 @@ export let remove = (xs: Element | Element[], cns: string): void => {
  * @param cn Single classname to toggle
  */
 export let toggle = (
-  xs: Element | Element[],
+  xs: Element | Element[] | null | undefined,
   cn: string,
   force?: boolean,
 ): void => {
+  if (!xs) error(`toggle target is null or undefined`)
   call(xs, x => x.classList.toggle(cn, force))
 }
 
@@ -133,7 +154,11 @@ export let toggle = (
  * @param cn Single classname
  * @returns True if every element contains provided classname and false if not
  */
-export let has = (xs: Element | Element[], cn: string): boolean => {
+export let has = (
+  xs: Element | Element[] | null | undefined,
+  cn: string,
+): boolean => {
+  if (!xs) error(`has target is null or undefined`)
   return call(xs, x => x.classList.contains(cn)).every(v => v)
 }
 
@@ -145,16 +170,31 @@ export let has = (xs: Element | Element[], cn: string): boolean => {
  * @param v Optional value
  * @returns Value being get, set, or removed
  */
-export function attr(x: Element, n: string, v?: any): any {
-  if (arguments.length < 3) {
+export function attr(x: Element | null | undefined, n: string): string | null
+export function attr(
+  x: Element | null | undefined,
+  n: string,
+  v: string | number | boolean,
+): void
+export function attr(
+  x: Element | null | undefined,
+  n: string,
+  v: boolean | null,
+): void
+export function attr(
+  x: Element | null | undefined,
+  n: string,
+  v?: string | number | boolean | null,
+): string | null | void {
+  if (!x) {
+    error(`attr target is null or undefined`)
+  } else if (arguments.length < 3) {
     return x.getAttribute(n)
   } else if (v) {
-    x.setAttribute(n, typeof v === 'boolean' ? '' : v)
+    x.setAttribute(n, typeof v === 'boolean' ? '' : (v as string))
   } else {
     x.removeAttribute(n)
   }
-
-  return v
 }
 
 /**
@@ -165,12 +205,25 @@ export function attr(x: Element, n: string, v?: any): any {
  * @param v Optional value
  * @returns Value being get or set
  */
-export function prop(x: HTMLElement, n: string, v?: any): any {
-  if (arguments.length < 3) {
+export function prop(x: HTMLElement | null | undefined, n: string): string
+export function prop(
+  x: HTMLElement | null | undefined,
+  n: string,
+  v: string | null,
+  priority?: 'important' | '' | undefined,
+): void
+export function prop(
+  x: HTMLElement | null | undefined,
+  n: string,
+  v?: string | null,
+  priority?: 'important' | '' | undefined,
+): string | void {
+  if (!x) {
+    error(`prop target is null or undefined`)
+  } else if (arguments.length < 3) {
     return x.style.getPropertyValue(n)
   } else {
-    x.style.setProperty(n, v)
-    return v
+    x.style.setProperty(n, v as string | null, priority)
   }
 }
 

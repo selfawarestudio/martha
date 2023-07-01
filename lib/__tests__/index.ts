@@ -1,4 +1,4 @@
-import { suite, test } from 'uvu'
+import { suite } from 'uvu'
 import * as assert from 'uvu/assert'
 import { JSDOM } from 'jsdom'
 import sinon from 'sinon'
@@ -26,7 +26,7 @@ on('should add an event listener to a single element', () => {
   let spy = sinon.spy()
 
   m.on(btn, 'click', spy)
-  btn.dispatchEvent(new window.Event('click'))
+  btn?.dispatchEvent(new window.Event('click'))
 
   assert.ok(spy.called)
 })
@@ -46,7 +46,7 @@ on('should return a function to remove the added event listener', () => {
   let spy = sinon.spy()
 
   let off = m.on(btn, 'click', spy)
-  let click = () => btn.dispatchEvent(new window.Event('click'))
+  let click = () => btn?.dispatchEvent(new window.Event('click'))
 
   click()
   off()
@@ -75,7 +75,7 @@ once('should fire the event only once', () => {
   let spy = sinon.spy()
 
   m.once(btn, 'click', spy)
-  let click = () => btn.dispatchEvent(new window.Event('click'))
+  let click = () => btn?.dispatchEvent(new window.Event('click'))
 
   click()
   click()
@@ -107,7 +107,7 @@ add('should add the class to the element', () => {
 
   m.add(el, 'foo')
 
-  assert.equal(el.className, 'foo')
+  assert.equal(el?.className, 'foo')
 })
 
 add('should add multiple classes to the element', () => {
@@ -115,7 +115,7 @@ add('should add multiple classes to the element', () => {
 
   m.add(el, 'bar baz')
 
-  assert.equal(el.className, 'bar baz')
+  assert.equal(el?.className, 'bar baz')
 })
 
 add('should add the class to each element in an array', () => {
@@ -158,7 +158,7 @@ remove('should remove the class from the element', () => {
 
   m.remove(el, 'foo')
 
-  assert.equal(el.className, 'bar baz')
+  assert.equal(el?.className, 'bar baz')
 })
 
 remove('should remove multiple classes from the element', () => {
@@ -166,7 +166,7 @@ remove('should remove multiple classes from the element', () => {
 
   m.remove(el, 'bar baz')
 
-  assert.equal(el.className, 'foo')
+  assert.equal(el?.className, 'foo')
 })
 
 remove('should remove the class from each element in an array', () => {
@@ -210,7 +210,7 @@ toggle('should toggle the provided class on an element', () => {
   m.toggle(el, 'bar')
   m.toggle(el, 'qux')
 
-  assert.equal(el.className, 'foo baz qux')
+  assert.equal(el?.className, 'foo baz qux')
 })
 
 toggle('should toggle the provided class on an array of elements', () => {
@@ -228,7 +228,7 @@ toggle('should behave like classList.add when force param is truthy', () => {
   m.toggle(el, 'bar', true)
   m.toggle(el, 'qux', true)
 
-  assert.equal(el.className, 'foo bar baz qux')
+  assert.equal(el?.className, 'foo bar baz qux')
 })
 
 toggle('should behave like classList.remove when force param is falsy', () => {
@@ -237,7 +237,7 @@ toggle('should behave like classList.remove when force param is falsy', () => {
   m.toggle(el, 'bar', false)
   m.toggle(el, 'qux', false)
 
-  assert.equal(el.className, 'foo baz')
+  assert.equal(el?.className, 'foo baz')
 })
 
 toggle.run()
@@ -301,7 +301,7 @@ attr('should set attributes when a value is provided as third arg', () => {
 
   m.attr(div, 'foo', 'bar')
 
-  assert.equal(div.getAttribute('foo'), 'bar')
+  assert.equal(div?.getAttribute('foo'), 'bar')
 })
 
 attr('should get attribute value when third arg is undefined', () => {
@@ -315,7 +315,7 @@ attr('should remove attribute when third arg is null', () => {
 
   m.attr(div, 'foo', null)
 
-  assert.not.ok(div.hasAttribute('foo'))
+  assert.not.ok(div?.hasAttribute('foo'))
 })
 
 attr.run()
@@ -390,7 +390,7 @@ index('should return index of provided element amongst siblings', () => {
   let el = m.qs('span', window.document)
   let orphan = window.document.createElement('div')
 
-  assert.equal(m.index(el), 1)
+  assert.equal(m.index(el!), 1)
   assert.equal(m.index(orphan), -1)
 })
 
@@ -402,7 +402,7 @@ rect('should return DOMRect for provided element', () => {
   let { window } = new JSDOM('<canvas></canvas>')
   let el = m.qs('canvas', window.document)
 
-  assert.equal(m.rect(el), {
+  assert.equal(m.rect(el!), {
     x: 0,
     y: 0,
     bottom: 0,
@@ -436,10 +436,10 @@ selectors('should select dom elements within the provided parent', () => {
 
   let main = m.qs('main')
 
-  assert.equal(main.constructor.name, 'HTMLElement')
-  assert.equal(m.qs('header', main), null)
+  assert.equal(main?.constructor.name, 'HTMLElement')
+  assert.equal(m.qs('header', main!), null)
 
-  let items = m.qsa('li', main)
+  let items = m.qsa('li', main!)
 
   assert.equal(items.length, 3)
   assert.ok(items.every(item => item.constructor.name === 'HTMLLIElement'))
