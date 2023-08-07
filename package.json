@@ -1,6 +1,6 @@
 {
   "name": "martha",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "🍑 A tiny collection of convenient JavaScript utilities.",
   "files": [
     "dist"
