@@ -56,7 +56,10 @@ let events =
 let classes =
   (
     action: 'add' | 'remove',
-  ): ((xs: Element | Element[] | null | undefined, ...cn: string[]) => any[]) =>
+  ): ((
+    xs: HTMLElement | HTMLElement[] | null | undefined,
+    ...cn: string[]
+  ) => any[]) =>
   (xs, cns) => {
     if (!xs) error(`${action} target is null or undefined`)
     return call(xs, x => x.classList[action](...cns.split(' ')))
@@ -113,7 +116,7 @@ export let once = <T extends EventTarget, K extends EventTypes<T>>(
  * @param cn Classnames to add
  */
 export let add = (
-  xs: Element | Element[] | null | undefined,
+  xs: HTMLElement | HTMLElement[] | null | undefined,
   cns: string,
 ): void => {
   classes('add')(xs, cns)
@@ -126,7 +129,7 @@ export let add = (
  * @param cn Classnames to remove
  */
 export let remove = (
-  xs: Element | Element[] | null | undefined,
+  xs: HTMLElement | HTMLElement[] | null | undefined,
   cns: string,
 ): void => {
   classes('remove')(xs, cns)
@@ -139,7 +142,7 @@ export let remove = (
  * @param cn Single classname to toggle
  */
 export let toggle = (
-  xs: Element | Element[] | null | undefined,
+  xs: HTMLElement | HTMLElement[] | null | undefined,
   cn: string,
   force?: boolean,
 ): void => {
@@ -155,7 +158,7 @@ export let toggle = (
  * @returns True if every element contains provided classname and false if not
  */
 export let has = (
-  xs: Element | Element[] | null | undefined,
+  xs: HTMLElement | HTMLElement[] | null | undefined,
   cn: string,
 ): boolean => {
   if (!xs) error(`has target is null or undefined`)
@@ -170,19 +173,22 @@ export let has = (
  * @param v Optional value
  * @returns Value being get, set, or removed
  */
-export function attr(x: Element | null | undefined, n: string): string | null
 export function attr(
-  x: Element | null | undefined,
+  x: HTMLElement | null | undefined,
+  n: string,
+): string | null
+export function attr(
+  x: HTMLElement | null | undefined,
   n: string,
   v: string | number | boolean,
 ): void
 export function attr(
-  x: Element | null | undefined,
+  x: HTMLElement | null | undefined,
   n: string,
   v: boolean | null,
 ): void
 export function attr(
-  x: Element | null | undefined,
+  x: HTMLElement | null | undefined,
   n: string,
   v?: string | number | boolean | null,
 ): string | null | void {
@@ -260,7 +266,7 @@ export let size = (): {
  * @param el A dom element with siblings
  * @returns The index of the element amongst its siblings
  */
-export let index = (el: Element): number => {
+export let index = (el: HTMLElement): number => {
   return Array.from(el.parentNode?.children ?? []).indexOf(el)
 }
 
@@ -270,7 +276,7 @@ export let index = (el: Element): number => {
  * @param el A dom element
  * @returns The DOMRect of the element
  */
-export let rect = (el: Element): DOMRect => el.getBoundingClientRect()
+export let rect = (el: HTMLElement): DOMRect => el.getBoundingClientRect()
 
 /**
  * Alias for querySelector
@@ -279,8 +285,10 @@ export let rect = (el: Element): DOMRect => el.getBoundingClientRect()
  * @param container
  * @returns The selected element
  */
-export let qs = (selector: string, container: Element | Document = document) =>
-  container.querySelector(selector)
+export let qs = (
+  selector: string,
+  container: HTMLElement | Document = document,
+) => container.querySelector(selector) as HTMLElement
 
 /**
  * Array-returning alias for querySelectorAll
@@ -291,7 +299,7 @@ export let qs = (selector: string, container: Element | Document = document) =>
  */
 export let qsa = (
   selector: string,
-  container: Element | Document = document,
+  container: HTMLElement | Document = document,
 ): HTMLElement[] => Array.from(container.querySelectorAll(selector))
 
 /**
