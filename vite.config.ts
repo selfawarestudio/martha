@@ -7,7 +7,7 @@ export default defineConfig({
     minify: 'esbuild',
     lib: {
       entry: resolve(__dirname, 'lib/index.ts'),
-      name: 'Martha',
+      name: 'martha',
       formats: ['es', 'umd', 'iife']
     },
   }
