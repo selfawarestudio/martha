@@ -23,7 +23,7 @@ let off
 
 function mount() {
   let button = qs('button')
-  
+
   // add click handler on button
   off = on(button, 'click', () => {
     console.log('click!')
@@ -56,7 +56,7 @@ Remove provided class(es) from element or array of elements. Multiple classnames
 
 `toggle(el|els, cx)`
 
-Toggle provided class from element or array of elements. 
+Toggle provided class from element or array of elements.
 
 `has(el|els, cn)`
 

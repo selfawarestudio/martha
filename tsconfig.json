@@ -13,8 +13,5 @@
     "rootDir": ".",
     "types": ["vite/client"]
   },
-  "include": [
-    "@types/**/*",
-    "lib/index.ts"
-  ]
+  "include": ["@types/**/*", "lib/index.ts"]
 }
