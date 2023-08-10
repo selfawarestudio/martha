@@ -173,28 +173,19 @@ export let has = (
  * @param v Optional value
  * @returns Value being get, set, or removed
  */
+export function attr(x: HTMLElement, n: string): string | null
+
 export function attr(
-  x: HTMLElement | null | undefined,
-  n: string,
-): string | null
-export function attr(
-  x: HTMLElement | null | undefined,
+  x: HTMLElement,
   n: string,
   v: string | number | boolean,
 ): void
-export function attr(
-  x: HTMLElement | null | undefined,
-  n: string,
-  v: boolean | null,
-): void
-export function attr(
-  x: HTMLElement | null | undefined,
-  n: string,
-  v?: string | number | boolean | null,
-): string | null | void {
-  if (!x) {
-    error(`attr target is null or undefined`)
-  } else if (arguments.length < 3) {
+
+export function attr(x: HTMLElement, n: string, v: boolean | null): void
+
+export function attr(...args: any[]) {
+  const [x, n, v] = args
+  if (args.length < 3) {
     return x.getAttribute(n)
   } else if (v) {
     x.setAttribute(n, typeof v === 'boolean' ? '' : (v as string))
@@ -211,22 +202,18 @@ export function attr(
  * @param v Optional value
  * @returns Value being get or set
  */
-export function prop(x: HTMLElement | null | undefined, n: string): string
+export function prop(x: HTMLElement, n: string): string
+
 export function prop(
-  x: HTMLElement | null | undefined,
+  x: HTMLElement,
   n: string,
   v: string | null,
-  priority?: 'important' | '' | undefined,
+  priority?: 'important' | '',
 ): void
-export function prop(
-  x: HTMLElement | null | undefined,
-  n: string,
-  v?: string | null,
-  priority?: 'important' | '' | undefined,
-): string | void {
-  if (!x) {
-    error(`prop target is null or undefined`)
-  } else if (arguments.length < 3) {
+
+export function prop(...args: any[]) {
+  const [x, n, v, priority] = args
+  if (args.length < 3) {
     return x.style.getPropertyValue(n)
   } else {
     x.style.setProperty(n, v as string | null, priority)
