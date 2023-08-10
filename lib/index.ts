@@ -1,4 +1,4 @@
-type EventMap<T extends EventTarget> = T extends MediaQueryList
+export type EventMap<T extends EventTarget> = T extends MediaQueryList
   ? MediaQueryListEventMap
   : T extends Document
   ? DocumentEventMap
@@ -6,12 +6,12 @@ type EventMap<T extends EventTarget> = T extends MediaQueryList
   ? WindowEventMap
   : HTMLElementEventMap
 
-type EventTypes<T extends EventTarget> = keyof EventMap<T> & string
+export type EventTypes<T extends EventTarget> = keyof EventMap<T> & string
 
-type EventValue<T extends EventTarget, K extends EventTypes<T>> = Extract<
-  EventMap<T>[K],
-  Event
->
+export type EventValue<
+  T extends EventTarget,
+  K extends EventTypes<T>,
+> = Extract<EventMap<T>[K], Event>
 
 let error = (msg: string): void => {
   throw new Error(`[martha] ${msg}`)
